@@ -23,10 +23,14 @@ google-services.json
 GoogleService-Info.plist
 
 # Local tooling
-.claude/
-CLAUDE.md
 docs/brief/
 *.pdf
+
+# TypeScript
+*.tsbuildinfo
+
+# End-to-end output
+tests/e2e/output/
 
 # Logs / OS
 npm-debug.*

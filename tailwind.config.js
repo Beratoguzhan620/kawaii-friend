@@ -1,0 +1,65 @@
+/** @type {import('tailwindcss').Config} */
+// Base tokens follow docs/DESIGN.md. This project is the one allowed exception to the
+// sober palette: pastel, rounded and soft (see docs/ROADMAP.md, stage 1).
+module.exports = {
+  content: ["./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+  darkMode: "class",
+  presets: [require("nativewind/preset")],
+  theme: {
+    extend: {
+      colors: {
+        bg: "#FBF6F3",
+        surface: "#FFFFFF",
+        "surface-2": "#F6EEEA",
+        border: "#EEDFD9",
+        ink: "#2B2330",
+        muted: "#76696F",
+        primary: "#B5536F",
+        accent: "#D9849B",
+        "accent-soft": "#F8E3E9",
+        mint: "#CDEBDD",
+        peach: "#F9D9C4",
+        sky: "#D6E6F5",
+        butter: "#F7EBC0",
+        danger: "#B42318",
+        "danger-soft": "#FBE4E1",
+        night: {
+          bg: "#151316",
+          surface: "#1E1B1F",
+          "surface-2": "#29252A",
+          border: "#363036",
+          ink: "#F1EBEE",
+          muted: "#AFA3A9",
+          primary: "#E8A3B6",
+          accent: "#E8A3B6",
+          "accent-soft": "#3A2830",
+          mint: "#2A3D34",
+          peach: "#43322A",
+          sky: "#28343F",
+          butter: "#3E3826",
+          danger: "#F2A097",
+          "danger-soft": "#3D2421",
+        },
+      },
+      fontFamily: {
+        sans: ["IBMPlexSans_400Regular"],
+        medium: ["IBMPlexSans_500Medium"],
+        semibold: ["IBMPlexSans_600SemiBold"],
+        mono: ["IBMPlexMono_400Regular"],
+      },
+      fontSize: {
+        xs: ["12px", "18px"],
+        sm: ["14px", "21px"],
+        base: ["16px", "24px"],
+        lg: ["20px", "26px"],
+        xl: ["24px", "30px"],
+        "2xl": ["32px", "38px"],
+      },
+      borderRadius: {
+        DEFAULT: "12px",
+        card: "20px",
+      },
+    },
+  },
+  plugins: [],
+};

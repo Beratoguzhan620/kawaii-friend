@@ -11,10 +11,11 @@ Her aşama ayrı bir branch ve PR olarak yapılır (`stage/<no>-<kisa-ad>`). Bir
 > Orijinal ödev metni yalnızca yerelde `docs/brief/` klasöründe durur (git'e girmez); bütün gereksinimler bu dosyaya işlenmiştir. Gereksinim: Expo managed, TypeScript, NativeWind, Firebase Auth (e-posta/şifre) + Firestore, Expo Notifications.
 
 ## Aşama 1 — Kurulum ve kimlik
-- [ ] Expo + TypeScript + NativeWind; `docs/DESIGN.md` token'ları — **istisna:** bu projede pastel/kawaii tema, yuvarlak köşeler, sevimli karakter görselleri ve bildirimlerde emoji serbest (ödev şartı); sert renk yok
-- [ ] Bottom Tab Navigation: Home (My Friend), History (etkileşim geçmişi), Settings
-- [ ] Firebase config `.env` (EXPO_PUBLIC_*) üzerinden; `.env.example` eklenir, gerçek değer repoya girmez
-- [ ] Login / Register / çıkış; giriş yapmadan uygulama kullanılamaz
+- [x] Expo + TypeScript + NativeWind; `docs/DESIGN.md` token'ları — **istisna:** bu projede pastel/kawaii tema, yuvarlak köşeler, sevimli karakter görselleri ve bildirimlerde emoji serbest (ödev şartı); sert renk yok
+- [x] Bottom Tab Navigation: Home (My Friend), History (etkileşim geçmişi), Settings
+- [x] Firebase config `.env` (EXPO_PUBLIC_*) üzerinden; `.env.example` eklenir, gerçek değer repoya girmez
+- [x] Login / Register / çıkış; giriş yapmadan uygulama kullanılamaz
+- [x] Firebase ayarı yoksa demo modu (veriler cihazda); CI uçtan uca akışı hem demo modunda hem Firebase emülatörlerinde çalıştırır
 
 ## Aşama 2 — Arkadaş ve durumlar
 - [ ] İlk girişte arkadaş oluşturma (ad, karakter seçimi)
