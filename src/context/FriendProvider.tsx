@@ -30,6 +30,7 @@ type FriendContextValue = {
   historyVersion: number;
   create(name: string, kind: FriendKind): Promise<void>;
   act(type: InteractionType): Promise<ActResult>;
+  reset(): Promise<void>;
   reload(): void;
 };
 
@@ -110,6 +111,13 @@ export function FriendProvider({ children }: { children: ReactNode }) {
     [user, record, key],
   );
 
+  const reset = useCallback(async () => {
+    if (!user) return;
+    await friends.reset(user.uid);
+    setLoaded({ key: key ?? "", status: "none", record: null });
+    setHistoryVersion((value) => value + 1);
+  }, [user, key]);
+
   const value = useMemo<FriendContextValue>(() => {
     const stats = record ? statsAt(record, now) : null;
     return {
@@ -121,9 +129,10 @@ export function FriendProvider({ children }: { children: ReactNode }) {
       historyVersion,
       create,
       act,
+      reset,
       reload: () => setAttempt((value) => value + 1),
     };
-  }, [status, record, now, historyVersion, create, act]);
+  }, [status, record, now, historyVersion, create, act, reset]);
 
   return <FriendContext.Provider value={value}>{children}</FriendContext.Provider>;
 }
