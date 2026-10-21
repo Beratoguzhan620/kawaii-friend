@@ -47,4 +47,14 @@ describe("demo friend store", () => {
     await store.create("u1", "a@example.com", newFriend("Bulut", "bulut", T0));
     expect(await store.history("u1", 10)).toEqual([]);
   });
+
+  it("resets the friend and its history", async () => {
+    const store = createDemoFriends(memoryStore(), uuid);
+    const friend = newFriend("Mochi", "mochi", T0);
+    await store.create("u1", "a@example.com", friend);
+    await store.record("u1", friend, { type: "feed", at: T0, friendState: "happy", level: 1 });
+    await store.reset("u1");
+    expect(await store.load("u1")).toBeNull();
+    expect(await store.history("u1", 10)).toEqual([]);
+  });
 });

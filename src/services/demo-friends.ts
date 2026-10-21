@@ -27,5 +27,9 @@ export function createDemoFriends(store: KeyValueStore, uuid: () => string): Fri
     async history(uid, limit) {
       return (await readHistory(uid)).slice(0, limit);
     },
+    async reset(uid) {
+      await store.removeItem(friendKey(uid));
+      await store.removeItem(historyKey(uid));
+    },
   };
 }

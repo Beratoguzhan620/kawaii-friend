@@ -1,5 +1,6 @@
 import {
   collection,
+  deleteDoc,
   doc,
   type DocumentData,
   type Firestore,
@@ -71,6 +72,17 @@ export function createFirestoreFriends(db: Firestore): FriendStore {
         level: interaction.level,
       });
       await batch.commit();
+    },
+
+    async reset(uid) {
+      // A batch holds at most 500 writes, so clear the history in chunks first.
+      const snapshot = await getDocs(interactions(uid));
+      for (let start = 0; start < snapshot.docs.length; start += 400) {
+        const batch = writeBatch(db);
+        for (const item of snapshot.docs.slice(start, start + 400)) batch.delete(item.ref);
+        await batch.commit();
+      }
+      await deleteDoc(user(uid));
     },
 
     async history(uid, limit) {

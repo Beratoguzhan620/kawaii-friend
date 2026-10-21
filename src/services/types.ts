@@ -40,4 +40,6 @@ export interface FriendStore {
   /** Saves the new state and appends the interaction to the history in one write. */
   record(uid: string, next: FriendRecord, interaction: Omit<Interaction, "id">): Promise<void>;
   history(uid: string, limit: number): Promise<Interaction[]>;
+  /** Removes the friend and its whole history; the user then makes a new one. */
+  reset(uid: string): Promise<void>;
 }
