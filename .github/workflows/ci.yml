@@ -1,0 +1,96 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    name: Build and test (demo mode)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Type check
+        run: pnpm typecheck
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: No inline styles
+        run: |
+          if grep -rnE "\bstyle=\{" app src --include=*.tsx | grep -v "<StatusBar"; then
+            echo "::error::Use className instead of inline styles."
+            exit 1
+          fi
+
+      - name: Unit tests
+        run: pnpm test
+
+      - name: Web build
+        run: pnpm build:web
+
+      - name: End-to-end flow
+        run: |
+          pnpm exec playwright install --with-deps chromium
+          pnpm serve:web > serve.log 2>&1 &
+          for i in $(seq 1 30); do curl -sf http://localhost:8090 > /dev/null && break; sleep 1; done
+          APP_MODE=demo pnpm test:e2e
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-demo
+          path: tests/e2e/output/
+          if-no-files-found: ignore
+
+  firebase:
+    name: End-to-end on Firebase emulators
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Web build for the emulators
+        run: pnpm build:web
+        env:
+          EXPO_PUBLIC_FIREBASE_EMULATOR_HOST: localhost
+
+      - name: End-to-end flow on the emulators
+        run: |
+          pnpm exec playwright install --with-deps chromium
+          npx -y firebase-tools@15.34.0 emulators:exec --only auth,firestore --project demo-kawaii-friend ./scripts/e2e-emulator.sh
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-firebase
+          path: tests/e2e/output/
+          if-no-files-found: ignore
