@@ -31,6 +31,8 @@ Her aşama ayrı bir branch ve PR olarak yapılır (`stage/<no>-<kisa-ad>`). Bir
 - [x] Bildirimi test etmek için "test bildirimi gönder" butonu (geliştirme modunda)
 
 ## Aşama 4 — Teslim
-- [ ] Icon + splash; `tsc` ve lint temiz; Firestore güvenlik kuralları (`firestore.rules`) repoda
-- [ ] En az 3 ekran görüntüsü + 1 bildirim görüntüsü/videosu; README (TR + EN) — Firebase kurulum adımlarıyla
+- [x] Icon + splash; `tsc` ve lint temiz; Firestore güvenlik kuralları (`firestore.rules`) repoda
+- [x] Güvenlik kuralı testleri (Firestore emülatöründe, CI'da)
+- [x] En az 3 ekran görüntüsü + tanıtım GIF'i; README (TR + EN) — Firebase kurulum adımlarıyla
+- [ ] Bildirim ekran görüntüsü/videosu — gerçek cihazda alınacak (web'de yerel bildirim yok)
 - [ ] Berat'ın cihazında doğrulama (elle)
