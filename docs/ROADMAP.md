@@ -26,9 +26,9 @@ Her aşama ayrı bir branch ve PR olarak yapılır (`stage/<no>-<kisa-ad>`). Bir
 - [x] History sekmesi: son etkileşimler listesi (Firestore alt koleksiyonu)
 
 ## Aşama 3 — Bildirimler
-- [ ] Expo Notifications izinleri; arkadaş acıkınca/yorulunca yerel bildirim planlama
-- [ ] Settings: bildirim aç/kapa (zorunlu), arkadaşı sıfırla, açık/koyu tema
-- [ ] Bildirimi test etmek için "test bildirimi gönder" butonu (geliştirme modunda)
+- [x] Expo Notifications izinleri; arkadaş acıkınca/yorulunca yerel bildirim planlama
+- [x] Settings: bildirim aç/kapa (zorunlu), arkadaşı sıfırla, açık/koyu tema
+- [x] Bildirimi test etmek için "test bildirimi gönder" butonu (geliştirme modunda)
 
 ## Aşama 4 — Teslim
 - [ ] Icon + splash; `tsc` ve lint temiz; Firestore güvenlik kuralları (`firestore.rules`) repoda

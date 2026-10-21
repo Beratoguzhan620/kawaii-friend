@@ -145,6 +145,26 @@ for (const [device, viewport, scheme] of [
     if (await page.getByTestId("action-play").filter({ visible: true }).isDisabled()) throw new Error("play should be back");
   }, page);
 
+  await step(`${device}: settings keep the theme and reminder choice`, async () => {
+    await tab(page, "Ayarlar").click();
+    await heading(page, "Ayarlar").waitFor();
+    await page.getByTestId("reminder-note").filter({ visible: true, hasText: "telefon uygulamasında" }).waitFor();
+    const other = scheme === "dark" ? "Açık" : "Koyu";
+    await page.getByRole("radio", { name: `Tema: ${other}` }).click();
+    const isDark = () => page.evaluate(() => document.documentElement.classList.contains("dark"));
+    if ((await isDark()) !== (other === "Koyu")) throw new Error("theme did not change");
+    const toggle = page.getByRole("switch", { name: "Hatırlatmalar" });
+    if (!(await toggle.isChecked())) throw new Error("reminders should start on");
+    await toggle.click();
+    await shot(page, `${device}-settings`);
+    await page.reload();
+    await heading(page, "Ayarlar").waitFor({ timeout: 15000 });
+    if ((await isDark()) !== (other === "Koyu")) throw new Error("theme was not remembered");
+    if (await page.getByRole("switch", { name: "Hatırlatmalar" }).isChecked()) throw new Error("reminder choice was not remembered");
+    await page.getByRole("radio", { name: "Tema: Sistem" }).click();
+    if ((await isDark()) !== (scheme === "dark")) throw new Error("system theme should follow the browser");
+  }, page);
+
   await step(`${device}: signing out guards the app; signing in brings the friend back`, async () => {
     await tab(page, "Ayarlar").click();
     await heading(page, "Ayarlar").waitFor();
@@ -158,6 +178,25 @@ for (const [device, viewport, scheme] of [
     await page.getByText("E-posta ya da şifre hatalı.").waitFor();
     await signIn(page, email, password);
     await heading(page, "Pamuk").waitFor();
+    await tab(page, "Arkadaşım").click();
+  }, page);
+
+  await step(`${device}: resetting the friend asks first, then starts over`, async () => {
+    await tab(page, "Ayarlar").click();
+    await button(page, "Arkadaşı sıfırla").click();
+    const dialog = page.getByRole("alertdialog", { name: "Pamuk sıfırlansın mı?" });
+    await dialog.waitFor();
+    await shot(page, `${device}-reset-dialog`);
+    await dialog.getByRole("button", { name: "Vazgeç" }).click();
+    await dialog.waitFor({ state: "detached" });
+    await heading(page, "Ayarlar").waitFor();
+    await button(page, "Arkadaşı sıfırla").click();
+    await page.getByRole("button", { name: "Evet, sıfırla" }).click();
+    await createFriend(page, "Bulut", "Lokum");
+    if (!(await text(page, "xp"))?.startsWith("0/100 XP")) throw new Error("the new friend should start from zero");
+    await tab(page, "Geçmiş").click();
+    await page.getByText("Henüz bir şey yapmadınız.", { exact: false }).filter({ visible: true }).waitFor();
+    await tab(page, "Arkadaşım").click();
   }, page);
 
   await step(`${device}: duplicate accounts are explained`, async () => {
