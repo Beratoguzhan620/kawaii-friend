@@ -13,16 +13,20 @@ import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { colorScheme } from "nativewind";
 import { useEffect } from "react";
-import { useColorScheme } from "react-native";
+import { ActivityIndicator, Text, useColorScheme, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
+import { Button } from "../src/components/Button";
+import { Friend } from "../src/components/Friend";
 import { AuthProvider, useAuth } from "../src/context/AuthProvider";
+import { FriendProvider, useFriend } from "../src/context/FriendProvider";
 import { useTheme } from "../src/lib/theme";
 
 SplashScreen.preventAutoHideAsync();
 
 function RootNavigator() {
   const { user, ready } = useAuth();
+  const { status, reload } = useFriend();
   const { dark, colors } = useTheme();
 
   useEffect(() => {
@@ -32,12 +36,35 @@ function RootNavigator() {
   // Keep the splash screen up until we know whether someone is signed in.
   if (!ready) return null;
 
+  if (user && status === "loading") {
+    return (
+      <View className="flex-1 items-center justify-center bg-bg dark:bg-night-bg" accessibilityLabel="Yükleniyor">
+        <ActivityIndicator color={colors.primary} />
+      </View>
+    );
+  }
+
+  if (user && status === "error") {
+    return (
+      <View className="flex-1 items-center justify-center gap-4 bg-bg px-6 dark:bg-night-bg">
+        <Friend kind="mochi" mood="tired" size={120} />
+        <Text className="text-center font-sans text-base text-ink dark:text-night-ink">
+          Arkadaşın yüklenemedi. Bağlantını kontrol edip tekrar dene.
+        </Text>
+        <Button label="Tekrar dene" variant="secondary" onPress={reload} />
+      </View>
+    );
+  }
+
   return (
     <>
       <StatusBar style={dark ? "light" : "dark"} />
       <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bg } }}>
-        <Stack.Protected guard={user !== null}>
+        <Stack.Protected guard={user !== null && status === "ready"}>
           <Stack.Screen name="(tabs)" />
+        </Stack.Protected>
+        <Stack.Protected guard={user !== null && status === "none"}>
+          <Stack.Screen name="create-friend" />
         </Stack.Protected>
         <Stack.Protected guard={user === null}>
           <Stack.Screen name="login" />
@@ -68,7 +95,9 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <AuthProvider>
-        <RootNavigator />
+        <FriendProvider>
+          <RootNavigator />
+        </FriendProvider>
       </AuthProvider>
     </SafeAreaProvider>
   );

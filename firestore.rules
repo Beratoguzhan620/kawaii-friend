@@ -1,0 +1,46 @@
+rules_version = '2';
+
+// Each user can only see and change their own friend and history.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    function isStat(value) {
+      return value is number && value >= 0 && value <= 100;
+    }
+
+    function isValidFriend(data) {
+      return data.keys().hasOnly(['email', 'friendName', 'character', 'friendState', 'lastInteraction',
+                                  'level', 'xp', 'hunger', 'energy', 'happiness', 'createdAt'])
+        && data.friendName is string && data.friendName.size() > 0 && data.friendName.size() <= 20
+        && data.character in ['mochi', 'tofu', 'bulut']
+        && data.friendState in ['happy', 'hungry', 'tired', 'bored']
+        && data.lastInteraction is timestamp && data.createdAt is timestamp
+        && data.level is int && data.level >= 1
+        && data.xp is int && data.xp >= 0
+        && isStat(data.hunger) && isStat(data.energy) && isStat(data.happiness);
+    }
+
+    match /users/{uid} {
+      allow read, delete: if isOwner(uid);
+      allow create: if isOwner(uid) && isValidFriend(request.resource.data)
+        && request.resource.data.email == request.auth.token.email;
+      allow update: if isOwner(uid) && isValidFriend(request.resource.data)
+        && request.resource.data.email == resource.data.email
+        && request.resource.data.createdAt == resource.data.createdAt;
+
+      match /interactions/{id} {
+        allow read, delete: if isOwner(uid);
+        allow create: if isOwner(uid)
+          && request.resource.data.keys().hasOnly(['type', 'at', 'friendState', 'level'])
+          && request.resource.data.type in ['feed', 'play', 'rest']
+          && request.resource.data.at is timestamp
+          && request.resource.data.friendState in ['happy', 'hungry', 'tired', 'bored']
+          && request.resource.data.level is int;
+        allow update: if false;
+      }
+    }
+  }
+}
