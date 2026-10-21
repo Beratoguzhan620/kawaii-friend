@@ -11,15 +11,16 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { colorScheme } from "nativewind";
 import { useEffect } from "react";
-import { ActivityIndicator, Text, useColorScheme, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { Button } from "../src/components/Button";
 import { Friend } from "../src/components/Friend";
 import { AuthProvider, useAuth } from "../src/context/AuthProvider";
 import { FriendProvider, useFriend } from "../src/context/FriendProvider";
+import { PreferencesProvider, usePreferences } from "../src/context/PreferencesProvider";
+import { ReminderScheduler } from "../src/components/ReminderScheduler";
 import { useTheme } from "../src/lib/theme";
 
 SplashScreen.preventAutoHideAsync();
@@ -27,14 +28,16 @@ SplashScreen.preventAutoHideAsync();
 function RootNavigator() {
   const { user, ready } = useAuth();
   const { status, reload } = useFriend();
+  const { ready: preferencesReady } = usePreferences();
   const { dark, colors } = useTheme();
+  const started = ready && preferencesReady;
 
   useEffect(() => {
-    if (ready) SplashScreen.hideAsync();
-  }, [ready]);
+    if (started) SplashScreen.hideAsync();
+  }, [started]);
 
-  // Keep the splash screen up until we know whether someone is signed in.
-  if (!ready) return null;
+  // Keep the splash screen up until we know who is signed in and which theme to use.
+  if (!started) return null;
 
   if (user && status === "loading") {
     return (
@@ -82,23 +85,18 @@ export default function RootLayout() {
     IBMPlexSans_600SemiBold,
     IBMPlexMono_400Regular,
   });
-  const system = useColorScheme();
-
-  // Follow the device theme. Tailwind uses darkMode: "class", and on web "system"
-  // would only clear the class, so pass the resolved scheme instead.
-  useEffect(() => {
-    colorScheme.set(system === "dark" ? "dark" : "light");
-  }, [system]);
-
   if (!fontsLoaded && fontError === null) return null;
 
   return (
     <SafeAreaProvider>
-      <AuthProvider>
-        <FriendProvider>
-          <RootNavigator />
-        </FriendProvider>
-      </AuthProvider>
+      <PreferencesProvider>
+        <AuthProvider>
+          <FriendProvider>
+            <ReminderScheduler />
+            <RootNavigator />
+          </FriendProvider>
+        </AuthProvider>
+      </PreferencesProvider>
     </SafeAreaProvider>
   );
 }
