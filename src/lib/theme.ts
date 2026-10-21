@@ -11,6 +11,10 @@ export const palette = {
     primary: "#B5536F",
     accent: "#D9849B",
     onPrimary: "#FFFFFF",
+    track: "#F1E6E1",
+    food: "#E7A37C",
+    energy: "#7FA8D6",
+    joy: "#D9849B",
   },
   dark: {
     bg: "#151316",
@@ -21,6 +25,10 @@ export const palette = {
     primary: "#E8A3B6",
     accent: "#E8A3B6",
     onPrimary: "#2B2330",
+    track: "#2F2A30",
+    food: "#E9B08E",
+    energy: "#93B6DE",
+    joy: "#E8A3B6",
   },
 } as const;
 
