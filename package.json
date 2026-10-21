@@ -32,6 +32,7 @@
     "react-native-worklets": "0.13.0"
   },
   "devDependencies": {
+    "@firebase/rules-unit-testing": "6.0.0",
     "@types/node": "26.6.5",
     "@types/react": "~19.3.0",
     "eslint": "^9.39.5",
@@ -51,6 +52,9 @@
     "test": "vitest run",
     "build:web": "expo export --platform web",
     "serve:web": "node scripts/serve-dist.mjs",
-    "test:e2e": "node tests/e2e/flow.mjs"
+    "test:e2e": "node tests/e2e/flow.mjs",
+    "test:rules": "npx -y firebase-tools@15.34.0 emulators:exec --only firestore --project demo-kawaii-friend \"vitest run --config vitest.rules.config.mts\"",
+    "icons": "node scripts/make-icons.mjs",
+    "media:readme": "node tests/e2e/readme-media.mjs"
   }
 }

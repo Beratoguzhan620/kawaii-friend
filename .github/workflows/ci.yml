@@ -77,6 +77,9 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
+      - name: Firestore security rules
+        run: pnpm test:rules
+
       - name: Web build for the emulators
         run: pnpm build:web
         env:
