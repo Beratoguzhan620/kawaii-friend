@@ -12,7 +12,11 @@
     "backgroundColor": "#FBF6F3",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.beratoguzhan.kawaiifriend"
+      "bundleIdentifier": "com.beratoguzhan.kawaiifriend",
+      "buildNumber": "1",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -22,7 +26,8 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.beratoguzhan.kawaiifriend"
+      "package": "com.beratoguzhan.kawaiifriend",
+      "versionCode": 1
     },
     "web": {
       "bundler": "metro",
@@ -30,7 +35,9 @@
       "favicon": "./assets/favicon.png",
       "name": "Kawaii Friend",
       "themeColor": "#D9849B",
-      "backgroundColor": "#FBF6F3"
+      "backgroundColor": "#FBF6F3",
+      "shortName": "Kawaii Friend",
+      "description": "Bakımı sana kalmış küçük bir sanal arkadaş."
     },
     "plugins": [
       "expo-router",
@@ -40,14 +47,19 @@
         "expo-splash-screen",
         {
           "image": "./assets/splash-icon.png",
-          "imageWidth": 120,
+          "imageWidth": 140,
           "resizeMode": "contain",
-          "backgroundColor": "#FBF6F3"
+          "backgroundColor": "#FBF6F3",
+          "dark": {
+            "image": "./assets/splash-icon.png",
+            "backgroundColor": "#151316"
+          }
         }
       ],
       [
         "expo-notifications",
         {
+          "icon": "./assets/notification-icon.png",
           "color": "#D9849B"
         }
       ]
