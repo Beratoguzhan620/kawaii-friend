@@ -13,6 +13,8 @@ A small virtual friend to look after. Sign in, pick a friend and give it a name,
 
 ## Try it
 
+**Live demo:** [beratoguzhan620.github.io/kawaii-friend](https://beratoguzhan620.github.io/kawaii-friend/) (the web version in demo mode: your account and friend stay in your browser, and reminders only exist in the phone apps)
+
 ```bash
 pnpm install
 pnpm web        # in the browser
@@ -152,7 +154,6 @@ flowchart LR
 ## Roadmap and known gaps
 
 - A screenshot of a notification on a real phone, and a check of the whole app on a device.
-- Live web demo.
 - Push notifications from a server, so reminders also reach a phone where the app was never opened after signing in.
 
 ## Background

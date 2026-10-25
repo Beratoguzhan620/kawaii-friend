@@ -13,6 +13,8 @@ Bakımı sana kalmış küçük bir sanal arkadaş. Giriş yap, bir arkadaş se�
 
 ## Deneme
 
+**Canlı demo:** [beratoguzhan620.github.io/kawaii-friend](https://beratoguzhan620.github.io/kawaii-friend/) (demo modunda web sürümü: hesabın ve arkadaşın tarayıcında kalır; hatırlatmalar yalnızca telefon uygulamasında çalışır)
+
 ```bash
 pnpm install
 pnpm web        # tarayıcıda
@@ -152,7 +154,6 @@ flowchart LR
 ## Yol haritası ve eksikler
 
 - Gerçek telefonda bir bildirim ekran görüntüsü ve uygulamanın cihazda baştan sona denenmesi.
-- Canlı web demosu.
 - Sunucudan push bildirim; böylece hatırlatmalar, girişten sonra uygulamanın hiç açılmadığı bir telefona da ulaşır.
 
 ## Arka plan
